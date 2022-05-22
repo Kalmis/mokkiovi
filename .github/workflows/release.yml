@@ -86,7 +86,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: python-app
-          path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          path: .
 
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
@@ -94,7 +94,7 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: 'production'
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          package: .
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_c491228b837346d1a227b4b22282f83e }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
