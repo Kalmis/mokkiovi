@@ -5,13 +5,19 @@ import fastapi
 app = fastapi.FastAPI()
 
 
-@app.get("/hello/{name}")
-def get_name(
-    name: str,
-):
+def get_name(name):
     return {
         "name": name,
     }
+
+
+@app.get("/hello/{name}")
+def hello(
+    name: str,
+):
+    return get_name(name)
+
+
 
 
 def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
