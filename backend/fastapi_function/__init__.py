@@ -9,6 +9,10 @@ app = fastapi.FastAPI()
 def get_name(
     name: str,
 ):
+    return name(name)
+
+
+def name(name):
     return {
         "name": name,
     }
