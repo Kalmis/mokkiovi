@@ -4,3 +4,12 @@
 
 azure-functions==1.11.2
 fastapi==0.78.0
+
+# DB Connections
+# Functions Python worker SHOULD have ODBC driver 17 installed
+pyodbc
+sqlalchemy==1.4.36
+
+# Authentication
+python-jose[cryptography]
+python-multipart
