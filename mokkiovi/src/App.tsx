@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import {
   Routes,
@@ -15,8 +15,6 @@ import './App.css';
 function RequireAuth({ children }: { children: JSX.Element }) {
   const auth = useAuth();
   const location = useLocation();
-  console.log('Wadap');
-  console.log(auth.user);
 
   if (!auth.user) {
     // Redirect them to the /login page, but save the current location they were
@@ -33,11 +31,17 @@ function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   const auth = useAuth();
-  console.log('awkard');
-  console.log(auth.user);
+
+  useEffect(() => {
+    auth.loadTokenFromStorage();
+  });
 
   // @ts-ignore
   const from = location.state?.from?.pathname || '/';
+
+  if (auth.user) {
+    return <Navigate to={from} replace />;
+  }
 
   return (
     <div className="Login">
@@ -47,9 +51,7 @@ function Login() {
             await auth.signin(credentialResponse);
             navigate(from, { replace: true });
           }}
-          onError={() => {
-            console.log('Login Failed');
-          }}
+          onError={() => {}}
           useOneTap
         />
       </GoogleOAuthProvider>
@@ -59,12 +61,11 @@ function Login() {
 
 function DefaultApp() {
   const auth = useAuth();
-  console.log(auth.user);
   return (
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
       <p>
-        Hello {auth.user}
+        Hello {auth.user.name}
         <code>src/App.tsx</code> and save to reload! ;
       </p>
       <a

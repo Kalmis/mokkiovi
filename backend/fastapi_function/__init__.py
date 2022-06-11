@@ -50,7 +50,6 @@ def get_name(name):
 class Token(BaseModel):
     access_token: str
     token_type: str
-    name: str
 
 
 class TokenData(BaseModel):
@@ -111,8 +110,10 @@ async def login_for_access_token_with_google(
     CLIENT_ID = "264927455960-l6oe17fmcga9hbck8u5vmjkdr3rpt97i.apps.googleusercontent.com"
     idinfo = id_token.verify_oauth2_token(google_token.id_token, requests.Request(), CLIENT_ID)
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": "test"}, expires_delta=access_token_expires)
-    return {"access_token": access_token, "token_type": "bearer", "name": idinfo["name"]}
+    access_token = create_access_token(
+        data={"sub": "test", "name": idinfo["name"]}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
