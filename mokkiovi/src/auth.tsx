@@ -23,18 +23,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signin = async (credentials: CredentialResponse) => {
     const payload = { id_token: credentials.credential };
-    try {
-      const { data } = await axios.post<CreateTokenResponse>(
-        'http://localhost:7071/token/google',
-        payload
-      );
-      localStorage.setItem('token', data.access_token);
-      setUser(jwt_decode(data.access_token));
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.log(error.response?.data);
-      }
-    }
+    const { data } = await axios.post<CreateTokenResponse>(
+      'http://localhost:7071/token/google',
+      payload
+    );
+    localStorage.setItem('token', data.access_token);
+    setUser(jwt_decode(data.access_token));
   };
 
   const signout = () => {
