@@ -13,4 +13,7 @@ sqlalchemy==1.4.36
 # Authentication
 python-jose[cryptography]
 python-multipart
+
+# Auth
 google-auth==2.7.0
+requests # Required by google-auth
