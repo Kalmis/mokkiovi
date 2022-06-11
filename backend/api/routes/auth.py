@@ -52,7 +52,7 @@ async def login_for_access_token_with_google(
     except AttributeError:
         logging.info(f"user not found with google sub {idinfo['sub']}")
 
-    if _is_allowed_email(idinfo["email"]):
+    if not _is_allowed_email(idinfo["email"]):
         logging.info("user not allowed to login")
         raise HTTPException(status_code=401, detail="user not allowed to login")
 
@@ -72,7 +72,7 @@ async def login_for_access_token_with_google(
 
 
 def _create_access_token(user: models.User, expires_delta: Union[timedelta, None] = None):
-    data = {"sub": str(user.id), "first_name": user.given_name, "last_name": user.family_name}
+    data = {"sub": str(user.id), "given_name": user.given_name, "family_name": user.family_name}
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta

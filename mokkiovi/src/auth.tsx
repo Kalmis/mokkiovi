@@ -6,7 +6,7 @@ import jwt_decode from 'jwt-decode';
 type CreateTokenResponse = {
   access_token: string;
   token_type: string;
-  name: string;
+  given_name: string;
 };
 
 interface AuthContextType {
