@@ -74,3 +74,5 @@ jobs:
           slot-name: ${{ env.AZURE_SLOT }}
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_MOKKIOVI_TEST }}
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true
