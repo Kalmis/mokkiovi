@@ -22,7 +22,9 @@ export default function Login() {
 
   return (
     <div className="Login">
-      <GoogleOAuthProvider clientId="264927455960-l6oe17fmcga9hbck8u5vmjkdr3rpt97i.apps.googleusercontent.com">
+      <GoogleOAuthProvider
+        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ''}
+      >
         <GoogleLogin
           onSuccess={async (credentialResponse) => {
             await auth.signin(credentialResponse);

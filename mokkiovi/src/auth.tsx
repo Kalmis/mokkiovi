@@ -23,9 +23,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<any>(null);
 
   const signin = async (credentials: CredentialResponse) => {
+    const backendUrl =
+      process.env.REACT_APP_BACKEND_URL || 'http://localhost:7071';
     const payload = { id_token: credentials.credential };
     const { data } = await axios.post<CreateTokenResponse>(
-      'http://localhost:7071/token/google',
+      `${backendUrl}/token/google`,
       payload
     );
     localStorage.setItem('token', data.access_token);
@@ -39,9 +41,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    * @param username The username which is configured on backend for test use
    */
   const siginTest = async (username: string) => {
+    const backendUrl =
+      process.env.REACT_APP_BACKEND_URL || 'http://localhost:7071';
     const payload = { username };
     const { data } = await axios.post<CreateTokenResponse>(
-      'http://localhost:7071/token/test',
+      `${backendUrl}/token/test`,
       payload
     );
     localStorage.setItem('token', data.access_token);
