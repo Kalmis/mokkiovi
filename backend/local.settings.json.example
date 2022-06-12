@@ -1,0 +1,11 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "BACKEND_SECRET_KEY": "secrettttt",
+    "BACKEND_GOOGLE_CLIENT_ID": "264927455960-l6oe17fmcga9hbck8u5vmjkdr3rpt97i.apps.googleusercontent.com",
+    "FIRST_ALLOWED_USER_EMAIL": "example@i_dont_exist.com",
+    "SQLALCHEMY_DATABASE_URL": "postgresql://mokkiovi_dev:OlenOmena1@localhost:5433/mokkiovi_dev"
+  }
+}

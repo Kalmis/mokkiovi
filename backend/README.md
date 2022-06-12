@@ -13,7 +13,7 @@ Postgres 13
 
 1. Create login
 ````
-CREATE ROLE mokkiovi WITH
+CREATE ROLE mokkiovi_dev WITH
   LOGIN
   NOSUPERUSER
   INHERIT
@@ -26,7 +26,7 @@ CREATE ROLE mokkiovi WITH
 ````
 CREATE DATABASE mokkiovi_dev
     WITH
-    OWNER = mokkiovi
+    OWNER = mokkiovi_dev
     ENCODING = 'UTF8'
     CONNECTION LIMIT = -1;
 ````
