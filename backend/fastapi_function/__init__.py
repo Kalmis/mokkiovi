@@ -1,4 +1,3 @@
-import logging
 from api.routes import auth
 
 import azure.functions as func

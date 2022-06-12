@@ -6,7 +6,25 @@
       "command": "host start",
       "problemMatcher": "$func-python-watch",
       "isBackground": true,
+      "dependsOn": "alembic upgrade head",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      }
+    },
+    {
+      "label": "alembic upgrade head",
       "dependsOn": "pip install (functions)",
+      "type": "shell",
+      "osx": {
+        "command": "${config:azureFunctions.pythonVenv}/bin/python -m alembic upgrade head"
+      },
+      "windows": {
+        "command": "${config:azureFunctions.pythonVenv}\\Scripts\\python -m alembic upgrade head"
+      },
+      "linux": {
+        "command": "${config:azureFunctions.pythonVenv}/bin/python -m alembic upgrade head"
+      },
+      "problemMatcher": [],
       "options": {
         "cwd": "${workspaceFolder}/backend"
       }
