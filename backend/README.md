@@ -22,7 +22,11 @@ CREATE ROLE mokkiovi_dev WITH
   NOREPLICATION
   PASSWORD 'OlenOmena1';
 ````
-2. Create DB
+2. Might be needed if commands are not ran as postgres
+```
+GRANT mokkiovi_dev TO <your_user_name>;
+```
+3. Create DB
 ````
 CREATE DATABASE mokkiovi_dev
     WITH
