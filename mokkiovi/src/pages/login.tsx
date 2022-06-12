@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth';
@@ -7,6 +7,7 @@ export default function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   const auth = useAuth();
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     auth.loadTokenFromStorage();
@@ -31,6 +32,26 @@ export default function Login() {
           useOneTap
         />
       </GoogleOAuthProvider>
+      <form
+        onSubmit={async (event) => {
+          event.preventDefault();
+          await auth.siginTest(username);
+          navigate(from, { replace: true });
+        }}
+      >
+        <label htmlFor="usernameInput">
+          <input
+            name="username"
+            id="usernameInput"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          username
+        </label>
+        <button type="submit">Log in</button>
+      </form>
     </div>
   );
 }

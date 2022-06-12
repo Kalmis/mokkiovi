@@ -12,6 +12,7 @@ type CreateTokenResponse = {
 interface AuthContextType {
   user: any;
   signin: (credentials: CredentialResponse) => void;
+  siginTest: (username: string) => void;
   signout: () => void;
   loadTokenFromStorage: () => string | null;
 }
@@ -25,6 +26,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const payload = { id_token: credentials.credential };
     const { data } = await axios.post<CreateTokenResponse>(
       'http://localhost:7071/token/google',
+      payload
+    );
+    localStorage.setItem('token', data.access_token);
+    setUser(jwt_decode(data.access_token));
+  };
+
+  /**
+   * Method for logging in with only username in test environment
+   * To be used in PR Preview environments where google sign in
+   * cannot be used due to ever changing redirect URL
+   * @param username The username which is configured on backend for test use
+   */
+  const siginTest = async (username: string) => {
+    const payload = { username };
+    const { data } = await axios.post<CreateTokenResponse>(
+      'http://localhost:7071/token/test',
       payload
     );
     localStorage.setItem('token', data.access_token);
@@ -49,6 +66,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     () => ({
       user,
       signin,
+      siginTest,
       signout,
       loadTokenFromStorage,
     }),

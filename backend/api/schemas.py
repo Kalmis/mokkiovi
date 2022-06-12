@@ -12,6 +12,10 @@ class TokenData(BaseModel):
     user_id: int
 
 
+class TestLogin(BaseModel):
+    username: str
+
+
 class GoogleToken(BaseModel):
     id_token: str
 

@@ -11,3 +11,6 @@ SQLALCHEMY_DATABASE_URL = os.environ["SQLALCHEMY_DATABASE_URL"]
 
 # First allowed username / email
 FIRST_ALLOWED_USER_EMAIL = os.environ["FIRST_ALLOWED_USER_EMAIL"]
+
+# Name of a user that is able to login without google sso in test environment
+TEST_USER = os.getenv("TEST_USER", "")
