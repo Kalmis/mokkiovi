@@ -6,11 +6,7 @@ import azure.functions as func
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.database import engine
-from api import models
 
-
-models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 app.include_router(auth.router)
 

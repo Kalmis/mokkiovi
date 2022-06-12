@@ -1,9 +1,30 @@
+import os
+import logging
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+
+# A hack to read the env variables from the Azure functions local.settings.json
+# so we don't need to manually or otherwise define them again. If the file does not
+# exist, see readme
+import pathlib
+import json
+
+current_dir = pathlib.Path(__file__).parent.resolve()
+local_settings_path = current_dir.parent / "local.settings.json"
+with open(local_settings_path, "r") as f:
+    local_settings = json.load(f)
+for env_key, env_value in local_settings["Values"].items():
+    orig_env_value = os.environ.get(env_key)
+    if orig_env_value != env_value:
+        logging.warning(
+            f"Overwrote env variable {env_key} value! Original: {orig_env_value} New: {env_value}"
+        )
+    os.environ[env_key] = env_value
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -18,12 +39,21 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+from api.database import Base  # noqa: E402
+
+# Make sure models are in memory
+# https://stackoverflow.com/questions/15660676/alembic-autogenerate-producing-empty-migration
+import api.models
+
+target_metadata = [Base.metadata]
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+
+# Set sql alchemy url
+config.set_main_option("sqlalchemy.url", os.environ["SQLALCHEMY_URL"])
 
 
 def run_migrations_offline() -> None:
@@ -64,9 +94,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
