@@ -19,3 +19,16 @@ CI/CD: Github actions (tests, backend deployment) & Netlify (frontend deployment
 
 * Backend: https://mokkiovi-test.azurewebsites.net/
 * Frontend: PR Specific environment, see PR for the link
+
+
+### Dev / Test environemnt setup
+
+#### Database
+
+Database users were created with the following SQL, due to problems with setting up AD login
+````
+CREATE USER "mokkiovi" WITH PASSWORD='';
+ALTER ROLE db_datareader ADD MEMBER "mokkiovi";
+ALTER ROLE db_datawriter ADD MEMBER "mokkiovi";
+ALTER ROLE db_ddladmin ADD MEMBER "mokkiovi";
+````

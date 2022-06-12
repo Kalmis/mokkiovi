@@ -4,3 +4,16 @@
 
 azure-functions==1.11.2
 fastapi==0.78.0
+
+# DB Connections
+sqlalchemy==1.4.36
+alembic==1.8.0
+psycopg2-binary==2.9.3
+
+# Authentication
+python-jose[cryptography]
+python-multipart
+
+# Auth
+google-auth==2.7.0
+requests # Required by google-auth
