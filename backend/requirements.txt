@@ -1,14 +1,9 @@
-# DO NOT include azure-functions-worker in this file
-# The Python Worker is managed by Azure Functions platform
-# Manually managing azure-functions-worker may cause unexpected issues
-
-azure-functions==1.11.2
 fastapi==0.78.0
+uvicorn
 
 # DB Connections
 sqlalchemy==1.4.36
 alembic==1.8.0
-psycopg2-binary==2.9.3
 
 # Authentication
 python-jose[cryptography]

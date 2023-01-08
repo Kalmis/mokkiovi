@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  mokkiovi-backend:
+    env_file:
+      - dev.env
+    build:
+      context: ./backend
+      target: mokkiovi
+    image: mokkiovi-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/mokkiovi
