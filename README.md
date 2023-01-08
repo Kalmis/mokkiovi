@@ -5,19 +5,19 @@ Mokkiovi is the the personal assistant for visiting and maintaining a Mökki. It
 ## Tech stack
 
 Frontend: React (Typescript) hosted via netlify
-Backend: FastAPI hosted via Azure functions
+Backend: Python (FastAPI) hosted via Azure Container Apps
 CI/CD: Github actions (tests, backend deployment) & Netlify (frontend deployment)
 
 ## URLs
 
 ### Production
 
-* Backend: https://mokkiovi.azurewebsites.net/
+* Backend: https://mokkiovi.politetree-edc6b28a.westeurope.azurecontainerapps.io
 * Frontend: https://mokkiovi.netlify.app/
 
 ### Test
 
-* Backend: https://mokkiovi-test.azurewebsites.net/
+* Backend: Not available
 * Frontend: PR Specific environment, see PR for the link
 
 
@@ -25,14 +25,33 @@ CI/CD: Github actions (tests, backend deployment) & Netlify (frontend deployment
 
 #### Database
 
-Database users were created with the following SQL, due to problems with setting up AD login
-````
-CREATE USER "mokkiovi" WITH PASSWORD='';
-ALTER ROLE db_datareader ADD MEMBER "mokkiovi";
-ALTER ROLE db_datawriter ADD MEMBER "mokkiovi";
-ALTER ROLE db_ddladmin ADD MEMBER "mokkiovi";
-````
+Uses SQLite at the moment.
 
+# Deployment
+
+Build Docker image and deploy anywhere :) The github workflow supports Azure Container Apps.
+
+For Azure Container Apps, the requirements are
+- Docker registry
+- Azure subscription
+- Azure Container App Environment
+- Azure Container App
+
+In short, create an container app & create an azure service principal. Then fill in the following Github secrets and you are done. Service principal can be created with
+
+```
+az ad sp create-for-rbac --name "telegramBotGithubDeploy" --role contributor \
+                            --scopes /subscriptions/<subscriotion-id>/resourceGroups/<resource-group>/providers/Microsoft.App/managedEnvironments/<azure-container-apps-environment-name> /subscriptions/<subscription-id>/resourceGroups/<resource-group>/providers/Microsoft.App/containerapps/<container-app-name> \
+                            --sdk-auth
+```
+
+Githup secrets
+* DOCKER_REGISTRY_USERNAME
+* DOCKER_REGISTRY_PASSWORD
+* DOCKER_IMAGE_NAME (e.g. yourDockerHubUsername/yourBotName)
+* AZURE_SP_CREDENTIALS (output of the az ad sp create-for-rbac command. Yes, the whole json)
+* AZURE_CONTAINER_APP_NAME
+* AZURE_RESOURCE_GROUP
 
 ## Setting up development environment in VS code
 
