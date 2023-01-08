@@ -40,7 +40,7 @@ For Azure Container Apps, the requirements are
 In short, create an container app & create an azure service principal. Then fill in the following Github secrets and you are done. Service principal can be created with
 
 ```
-az ad sp create-for-rbac --name "telegramBotGithubDeploy" --role contributor \
+az ad sp create-for-rbac --name "mokkioviGithubDeploy" --role contributor \
                             --scopes /subscriptions/<subscriotion-id>/resourceGroups/<resource-group>/providers/Microsoft.App/managedEnvironments/<azure-container-apps-environment-name> /subscriptions/<subscription-id>/resourceGroups/<resource-group>/providers/Microsoft.App/containerapps/<container-app-name> \
                             --sdk-auth
 ```
