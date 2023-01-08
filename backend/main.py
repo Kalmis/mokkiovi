@@ -1,10 +1,7 @@
-from api.routes import auth
-
-import azure.functions as func
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from api.routes import auth
 
 app = FastAPI()
 app.include_router(auth.router)
@@ -20,7 +17,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
-    return func.AsgiMiddleware(app).handle(req, context)
