@@ -69,14 +69,14 @@ Before starting the development, a correct version of Python, pre-commit hooks, 
 5. Open a terminal in VS Code if it is not open yet (View | Terminal)
 6. Check which python version is required and install it
    1. Check the required python version by `pyenv versions`
-   2. If it is not installed then run `pyenv install x.y.z` (```pyenv: version `3.10.6' is not installed (set by /Users/kimipaivarinta/git/kokko-clean/.python-version)```)
-   3. If it is installed, you should see a asterix next to the correct version (`* 3.10.6 (set by /Users/kimipaivarinta/git/kokko-clean/.python-version)`)
+   2. If it is not installed then run `pyenv install x.y.z` (```pyenv: version `3.10.6' is not installed (set by /Users/kimipaivarinta/git/mokkiovi-clean/.python-version)```)
+   3. If it is installed, you should see a asterix next to the correct version (`* 3.10.6 (set by /Users/kimipaivarinta/git/mokkiovi-clean/.python-version)`)
 7. Create a virtual environment called by `python -m venv venv`
 8. Activate the virtual environment by `source venv/bin/activate` or on Windows (`.\venv\Scripts\Activate`) (this should be done automatically by VS Code when you open the project in the future)
 9.  Update to the latest pip `pip install --upgrade pip`
 10. Install dependencies by running  `pip install -r app/test-requirements.txt` (also install requirements.txt) and `pip install -r app/dev-requirements.txt`
    1. This will install 1) Normal depdencies (airflow, requests etc.), 2) Test dependencies (pytest etc.), and 3) Dev dependencies (lint/formatting etc.)
-   2. While testing and running the Kokko code is most convenient inside a Docker container, all the dependencies should be installed in the virtual environment, so VS Code is able to locate them.
+   2. While testing and running the mokkiovi code is most convenient inside a Docker container, all the dependencies should be installed in the virtual environment, so VS Code is able to locate them.
 11. Install pre-commit hooks by running `pre-commit install`
 12. You are all set! Some notes
     1.  Flake8 & Pylance will be automatically analysing all open files. You can see the problems in "Problems" tab at the bottom of VS code. Fix the problems while you see them.

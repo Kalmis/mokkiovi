@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -6,9 +8,9 @@ from api.routes import auth
 app = FastAPI()
 app.include_router(auth.router)
 
-origins = [
-    "http://localhost:3000",
-]
+origins_raw = os.environ["BACKEND_ALLOWED_ORIGINS"]
+
+origins = [origin for origin in origins_raw.split(";")]
 
 app.add_middleware(
     CORSMiddleware,
