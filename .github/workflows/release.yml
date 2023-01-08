@@ -9,7 +9,6 @@ on:
     paths:
     - 'backend/**'
     - '.github/**'
-  pull_request: # TODO: Remove me before merging
 
   # Allow manual trigger 
   workflow_dispatch:      

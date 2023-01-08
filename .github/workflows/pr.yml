@@ -1,0 +1,39 @@
+name: Run tests for PR
+
+# When this action will be executed
+on:
+  pull_request:
+
+
+env:
+  BACKEND_PATH: "./backend"
+  PYTHON_VERSION: "3.11" 
+
+jobs:
+  backend-test:
+    # Separate job for tests, so test dependencies are not part of prod build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Python version
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Create and start virtual environment
+        working-directory: ${{ env.BACKEND_PATH }}
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+
+      - name: Install dependencies
+        working-directory: ${{ env.BACKEND_PATH }}
+        run: pip install -r test-requirements.txt
+
+      - name: Run tests
+        working-directory: ${{ env.BACKEND_PATH }}
+        run: |
+          pytest -v --cov=. tests
+  
