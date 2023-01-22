@@ -5,9 +5,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider, GlobalStyles } from '@mui/material';
 import { useAuth } from './auth';
 import Login from './pages/login';
+import FrontPage from './pages/frontPage';
 
-import logo from './logo.svg';
-import './App.css';
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const auth = useAuth();
@@ -24,26 +23,6 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   return children;
 }
 
-function FrontPage() {
-  const auth = useAuth();
-  return (
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <p>
-        Hello {auth.user.given_name}
-        <code>src/App.tsx</code> and save to reload! ;
-      </p>
-      <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Learn React
-      </a>
-    </header>
-  );
-}
 
 function App() {
   const theme = createTheme()
