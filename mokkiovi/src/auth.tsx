@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signin = async (credentials: CredentialResponse) => {
     const backendUrl =
-      process.env.REACT_APP_BACKEND_URL || 'http://localhost:7071';
+      process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
     const payload = { id_token: credentials.credential };
     const { data } = await axios.post<CreateTokenResponse>(
       `${backendUrl}/token/google`,
@@ -42,7 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    */
   const siginTest = async (username: string) => {
     const backendUrl =
-      process.env.REACT_APP_BACKEND_URL || 'http://localhost:7071';
+      process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
     const payload = { username };
     const { data } = await axios.post<CreateTokenResponse>(
       `${backendUrl}/token/test`,
