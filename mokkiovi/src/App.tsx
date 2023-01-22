@@ -1,5 +1,8 @@
-import React from 'react';
+import React,  { useState } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import CssBaseline from '@mui/material/CssBaseline';
+
+import { createTheme, ThemeProvider, GlobalStyles } from '@mui/material';
 import { useAuth } from './auth';
 import Login from './pages/login';
 
@@ -43,20 +46,28 @@ function FrontPage() {
 }
 
 function App() {
+  const theme = createTheme()
+  const [backgroundColor, setBackgroundColor] = useState('#fff');
   return (
-    <div className="App">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <RequireAuth>
-              <FrontPage />
-            </RequireAuth>
-          }
+    <ThemeProvider theme={theme} >
+      <CssBaseline/>
+      <GlobalStyles
+          styles={{
+            body: { backgroundColor },
+          }}
         />
-        <Route path="login" element={<Login />} />
-      </Routes>
-    </div>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <FrontPage />
+              </RequireAuth>
+            }
+          />
+          <Route path="login" element={<Login setBackgroundColor={setBackgroundColor}/>} />
+        </Routes>
+    </ThemeProvider>
   );
 }
 

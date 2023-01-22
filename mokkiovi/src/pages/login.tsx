@@ -1,16 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
+import './login.css';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import TextField from '@mui/material/TextField'
+import Container from '@mui/material/Container'
+import Button  from '@mui/material/Button';
+import LoginIcon from '@mui/icons-material/Login';
+
 import { useAuth } from '../auth';
 
-export default function Login() {
+export default function Login(props: {setBackgroundColor: Dispatch<SetStateAction<string>>}) {
   const location = useLocation();
   const navigate = useNavigate();
   const auth = useAuth();
   const [username, setUsername] = useState('');
+  const { setBackgroundColor } = props;
 
   useEffect(() => {
     auth.loadTokenFromStorage();
+    // Well, this is one way to do it get rid of the global style background color, but it feels just... Wrong.
+    setBackgroundColor('transparent')
   });
 
   // @ts-ignore
@@ -21,7 +30,8 @@ export default function Login() {
   }
 
   return (
-    <div className="Login">
+    // Override the global theme background
+    <Container className="Login">
       <GoogleOAuthProvider
         clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ''}
       >
@@ -34,6 +44,7 @@ export default function Login() {
           useOneTap
         />
       </GoogleOAuthProvider>
+
       <form
         onSubmit={async (event) => {
           event.preventDefault();
@@ -41,19 +52,9 @@ export default function Login() {
           navigate(from, { replace: true });
         }}
       >
-        <label htmlFor="usernameInput">
-          <input
-            name="username"
-            id="usernameInput"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          username
-        </label>
-        <button type="submit">Log in</button>
+        <TextField required id='username' label='Username' value={username} onChange={(e) => setUsername(e.target.value)}/>
+        <Button variant="contained" type="submit" endIcon={<LoginIcon/>}>Log in</Button>
       </form>
-    </div>
+    </Container>
   );
 }
