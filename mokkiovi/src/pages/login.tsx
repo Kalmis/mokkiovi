@@ -4,7 +4,9 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField'
 import Container from '@mui/material/Container'
+import Stack from '@mui/material/Stack'
 import Button  from '@mui/material/Button';
+import Box  from '@mui/material/Box';
 import LoginIcon from '@mui/icons-material/Login';
 
 import { useAuth } from '../auth';
@@ -31,30 +33,36 @@ export default function Login(props: {setBackgroundColor: Dispatch<SetStateActio
 
   return (
     // Override the global theme background
-    <Container className="Login">
-      <GoogleOAuthProvider
-        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ''}
-      >
-        <GoogleLogin
-          onSuccess={async (credentialResponse) => {
-            await auth.signin(credentialResponse);
-            navigate(from, { replace: true });
-          }}
-          onError={() => {}}
-          useOneTap
-        />
-      </GoogleOAuthProvider>
+    <Container>
+      <Box display="flex" alignItems="flex-end" justifyContent="center" height="80vh">
+        <GoogleOAuthProvider
+          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ''}
+        >
+          <Stack direction="row"   spacing={6}>
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                await auth.signin(credentialResponse);
+                navigate(from, { replace: true });
+              }}
+              onError={() => {}}
+              useOneTap
+            />
 
-      <form
-        onSubmit={async (event) => {
-          event.preventDefault();
-          await auth.siginTest(username);
-          navigate(from, { replace: true });
-        }}
-      >
-        <TextField required id='username' label='Username' value={username} onChange={(e) => setUsername(e.target.value)}/>
-        <Button variant="contained" type="submit" endIcon={<LoginIcon/>}>Log in</Button>
-      </form>
+            <Box>
+              <form
+                onSubmit={async (event) => {
+                  event.preventDefault();
+                  await auth.siginTest(username);
+                  navigate(from, { replace: true });
+                }}
+              >
+                <TextField required variant="filled" id='username' label='Username' value={username} onChange={(e) => setUsername(e.target.value)}/>
+                <Button variant="contained" type="submit" endIcon={<LoginIcon/>}>Log in</Button>
+              </form>
+            </Box>
+          </Stack>
+        </GoogleOAuthProvider>
+      </Box>
     </Container>
   );
 }
