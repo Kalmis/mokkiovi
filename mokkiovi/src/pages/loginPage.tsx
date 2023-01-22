@@ -11,7 +11,7 @@ import LoginIcon from '@mui/icons-material/Login';
 
 import { useAuth } from '../auth';
 
-export default function Login(props: {setBackgroundColor: Dispatch<SetStateAction<string>>}) {
+export default function LoginPage(props: {setBackgroundColor: Dispatch<SetStateAction<string>>}) {
   const location = useLocation();
   const navigate = useNavigate();
   const auth = useAuth();

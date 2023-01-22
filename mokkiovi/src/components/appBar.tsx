@@ -14,16 +14,15 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import CottageIcon from '@mui/icons-material/Cottage';
+import { NavLink } from 'react-router-dom';
 
 import { useAuth } from '../auth';
 
-const pages = ['Feed', 'How-to', 'Settings'];
 
 function MainAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const auth = useAuth();
-  console.log(auth.user.picture_url)
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -39,6 +38,7 @@ function MainAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  
 
   return (
     <AppBar position="static">
@@ -48,8 +48,8 @@ function MainAppBar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="/"
+            component={NavLink}
+            to='/'
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -92,11 +92,15 @@ function MainAppBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+            <MenuItem component={NavLink} key='feed' to='/feed' onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">Feed</Typography>
+            </MenuItem>
+            <MenuItem component={NavLink} key='how-to' to='/how-to' onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">How-to</Typography>
+            </MenuItem>
+            <MenuItem component={NavLink} key='settings' to='/settings' onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">Settings</Typography>
+            </MenuItem>
             </Menu>
           </Box>
           <CottageIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -119,15 +123,27 @@ function MainAppBar() {
             MökkiOvi
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+            <Button
+                component={NavLink}
                 sx={{ my: 2, color: 'white', display: 'block' }}
+                to='/feed'
               >
-                {page}
-              </Button>
-            ))}
+                Feed
+            </Button>
+            <Button
+                component={NavLink}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+                to='/how-to'
+              >
+                How-to
+            </Button>
+            <Button
+                component={NavLink}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+                to='/settings'
+              >
+                Settings
+            </Button>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

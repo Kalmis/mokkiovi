@@ -4,8 +4,11 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import { createTheme, ThemeProvider, GlobalStyles } from '@mui/material';
 import { useAuth } from './auth';
-import Login from './pages/login';
+import LoginPage from './pages/loginPage';
 import FrontPage from './pages/frontPage';
+import FeedPage from './pages/feedPage';
+import SettingsPage from './pages/settingsPage';
+import HowToPage from './pages/howToPage';
 
 
 function RequireAuth({ children }: { children: JSX.Element }) {
@@ -44,7 +47,31 @@ function App() {
               </RequireAuth>
             }
           />
-          <Route path="login" element={<Login setBackgroundColor={setBackgroundColor}/>} />
+          <Route
+            path="/feed"
+            element={
+              <RequireAuth>
+                <FeedPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <RequireAuth>
+                <SettingsPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/how-to"
+            element={
+              <RequireAuth>
+                <HowToPage />
+              </RequireAuth>
+            }
+          />
+          <Route path="login" element={<LoginPage setBackgroundColor={setBackgroundColor}/>} />
         </Routes>
     </ThemeProvider>
   );
