@@ -2,8 +2,9 @@ import React,  { useState } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import { createTheme, ThemeProvider, GlobalStyles } from '@mui/material';
+import { createTheme, ThemeProvider, GlobalStyles, Container } from '@mui/material';
 import { useAuth } from './auth';
+import  MainAppBar  from './components/appBar';
 import LoginPage from './pages/loginPage';
 import FrontPage from './pages/frontPage';
 import FeedPage from './pages/feedPage';
@@ -26,6 +27,18 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   return children;
 }
 
+function ProtectedPageWithMenu({ children }: { children: JSX.Element }) {
+
+  return (
+    <RequireAuth>
+      <Container>
+        <MainAppBar/>
+        {children}
+      </Container>
+    </RequireAuth>
+  )
+}
+
 
 function App() {
   const theme = createTheme()
@@ -42,33 +55,33 @@ function App() {
           <Route
             path="/"
             element={
-              <RequireAuth>
+              <ProtectedPageWithMenu>
                 <FrontPage />
-              </RequireAuth>
+              </ProtectedPageWithMenu>
             }
           />
           <Route
             path="/feed"
             element={
-              <RequireAuth>
+              <ProtectedPageWithMenu>
                 <FeedPage />
-              </RequireAuth>
+              </ProtectedPageWithMenu>
             }
           />
           <Route
             path="/settings"
             element={
-              <RequireAuth>
+              <ProtectedPageWithMenu>
                 <SettingsPage />
-              </RequireAuth>
+              </ProtectedPageWithMenu>
             }
           />
           <Route
             path="/how-to"
             element={
-              <RequireAuth>
+              <ProtectedPageWithMenu>
                 <HowToPage />
-              </RequireAuth>
+              </ProtectedPageWithMenu>
             }
           />
           <Route path="login" element={<LoginPage setBackgroundColor={setBackgroundColor}/>} />
