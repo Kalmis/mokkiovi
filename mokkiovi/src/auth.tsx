@@ -3,6 +3,13 @@ import type { CredentialResponse } from '@react-oauth/google';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
+type User = {
+  sub: string;
+  given_name: string;
+  family_name: string;
+  picture_url: string | undefined;
+}
+
 type CreateTokenResponse = {
   access_token: string;
   token_type: string;
@@ -10,7 +17,7 @@ type CreateTokenResponse = {
 };
 
 interface AuthContextType {
-  user: any;
+  user: User;
   signin: (credentials: CredentialResponse) => void;
   siginTest: (username: string) => void;
   signout: () => void;
