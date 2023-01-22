@@ -3,6 +3,13 @@ import type { CredentialResponse } from '@react-oauth/google';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
+type User = {
+  sub: string;
+  given_name: string;
+  family_name: string;
+  picture_url: string | undefined;
+}
+
 type CreateTokenResponse = {
   access_token: string;
   token_type: string;
@@ -10,7 +17,7 @@ type CreateTokenResponse = {
 };
 
 interface AuthContextType {
-  user: any;
+  user: User;
   signin: (credentials: CredentialResponse) => void;
   siginTest: (username: string) => void;
   signout: () => void;
@@ -24,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signin = async (credentials: CredentialResponse) => {
     const backendUrl =
-      process.env.REACT_APP_BACKEND_URL || 'http://localhost:7071';
+      process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
     const payload = { id_token: credentials.credential };
     const { data } = await axios.post<CreateTokenResponse>(
       `${backendUrl}/token/google`,
@@ -42,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    */
   const siginTest = async (username: string) => {
     const backendUrl =
-      process.env.REACT_APP_BACKEND_URL || 'http://localhost:7071';
+      process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
     const payload = { username };
     const { data } = await axios.post<CreateTokenResponse>(
       `${backendUrl}/token/test`,

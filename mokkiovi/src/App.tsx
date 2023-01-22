@@ -1,10 +1,16 @@
-import React from 'react';
+import React,  { useState } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from './auth';
-import Login from './pages/login';
+import CssBaseline from '@mui/material/CssBaseline';
 
-import logo from './logo.svg';
-import './App.css';
+import { createTheme, ThemeProvider, GlobalStyles, Container } from '@mui/material';
+import { useAuth } from './auth';
+import  MainAppBar  from './components/appBar';
+import LoginPage from './pages/loginPage';
+import FrontPage from './pages/frontPage';
+import FeedPage from './pages/feedPage';
+import SettingsPage from './pages/settingsPage';
+import HowToPage from './pages/howToPage';
+
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const auth = useAuth();
@@ -21,42 +27,66 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   return children;
 }
 
-function FrontPage() {
-  const auth = useAuth();
+function ProtectedPageWithMenu({ children }: { children: JSX.Element }) {
+
   return (
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <p>
-        Hello {auth.user.given_name}
-        <code>src/App.tsx</code> and save to reload! ;
-      </p>
-      <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Learn React
-      </a>
-    </header>
-  );
+    <RequireAuth>
+      <Container>
+        <MainAppBar/>
+        {children}
+      </Container>
+    </RequireAuth>
+  )
 }
 
+
 function App() {
+  const theme = createTheme()
+  const [backgroundColor, setBackgroundColor] = useState('#fff');
   return (
-    <div className="App">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <RequireAuth>
-              <FrontPage />
-            </RequireAuth>
-          }
+    <ThemeProvider theme={theme} >
+      <CssBaseline/>
+      <GlobalStyles
+          styles={{
+            body: { backgroundColor },
+          }}
         />
-        <Route path="login" element={<Login />} />
-      </Routes>
-    </div>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <ProtectedPageWithMenu>
+                <FrontPage />
+              </ProtectedPageWithMenu>
+            }
+          />
+          <Route
+            path="/feed"
+            element={
+              <ProtectedPageWithMenu>
+                <FeedPage />
+              </ProtectedPageWithMenu>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedPageWithMenu>
+                <SettingsPage />
+              </ProtectedPageWithMenu>
+            }
+          />
+          <Route
+            path="/how-to"
+            element={
+              <ProtectedPageWithMenu>
+                <HowToPage />
+              </ProtectedPageWithMenu>
+            }
+          />
+          <Route path="login" element={<LoginPage setBackgroundColor={setBackgroundColor}/>} />
+        </Routes>
+    </ThemeProvider>
   );
 }
 
