@@ -1,3 +1,4 @@
+from datetime import datetime
 import enum
 
 from sqlalchemy import Boolean, Column, DateTime, Enum, ForeignKey, Integer, String
@@ -6,7 +7,7 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 
-class RolesEnum(enum.Enum):
+class RolesEnum(str, enum.Enum):
     # Note: The variable name is stored in DB; not value
     ADMIN = "Admin"
     NORMAL = "Normal"
@@ -25,6 +26,16 @@ class User(Base):
     is_active = Column(Boolean, default=True, nullable=False)
 
     roles = relationship("UserRole", back_populates="user", cascade="all, delete-orphan")
+
+    def current_role(self) -> RolesEnum | None:
+        current_time = datetime.utcnow()
+        for role in self.roles:
+            role: UserRole
+            if current_time >= role.valid_from and (
+                not role.valid_until or current_time < role.valid_until
+            ):
+                return role.role
+        return None
 
 
 class UserRole(Base):

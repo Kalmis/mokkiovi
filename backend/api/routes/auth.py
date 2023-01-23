@@ -71,6 +71,9 @@ def _handle_login(db: Session, idinfo: dict, validate_allowed_email: bool = True
 
     try:
         user = get_user_by_google_sub(db, idinfo["sub"])
+        if not user.current_role():
+            logging.info("user does not have role")
+            raise HTTPException(status_code=401, detail="user not allowed to login")
         access_token = _create_access_token(user)
         logging.info(f"login successful {user.id}")
         return access_token
@@ -101,7 +104,12 @@ def _handle_login(db: Session, idinfo: dict, validate_allowed_email: bool = True
 
 
 def _create_access_token(user: models.User, expires_delta: Union[timedelta, None] = None):
-    data = {"sub": str(user.id), "given_name": user.given_name, "family_name": user.family_name}
+    data = {
+        "sub": str(user.id),
+        "given_name": user.given_name,
+        "family_name": user.family_name,
+        "role": user.current_role(),
+    }
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta

@@ -33,12 +33,11 @@ class UserCreate(UserBase):
     google_sub: str
     role: RolesEnum | None
     valid_from: datetime | None
-    valid_until: datetime | None
+    valid_until: datetime | None = None
 
 
 class User(UserBase):
     id: int
-    is_active: bool
 
     class Config:
         orm_mode = True

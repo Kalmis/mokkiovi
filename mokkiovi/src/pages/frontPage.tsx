@@ -8,7 +8,7 @@ export default function FrontPage() {
     return (
       <div>
         <h1>
-          Hello {auth.user.given_name}
+          Hello {auth.user.given_name}. Nice title {auth.user.role}
         </h1>
       </div>
     );
