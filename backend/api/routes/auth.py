@@ -1,7 +1,6 @@
 import logging
 from datetime import datetime, timedelta
 from typing import Union
-from xml.dom.pulldom import SAX2DOM
 
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -25,7 +24,7 @@ from ..config import (
 )
 from ..crud import create_user, get_user_by_google_sub
 from ..dependencies import get_current_user, get_db
-from ..schemas import GoogleToken, TestLogin, Token, User, UserCreate
+from ..schemas import GoogleToken, TestLogin, Token, User, UserCreate, RolesEnum
 
 router = APIRouter()
 
@@ -82,9 +81,12 @@ def _handle_login(db: Session, idinfo: dict, validate_allowed_email: bool = True
     except AttributeError:
         logging.info(f"user not found with google sub {idinfo['sub']}")
 
-    if validate_allowed_email and not _is_allowed_email(idinfo["email"]):
+    if validate_allowed_email and not _is_first_allowed_email(idinfo["email"]):
         logging.info("user not allowed to login")
         raise HTTPException(status_code=401, detail="user not allowed to login")
+
+    # If we are here, we are creating first user
+    idinfo["role"] = RolesEnum.ADMIN
 
     user = create_user(
         db,
@@ -94,6 +96,7 @@ def _handle_login(db: Session, idinfo: dict, validate_allowed_email: bool = True
             given_name=idinfo["given_name"],
             family_name=idinfo["family_name"],
             google_sub=idinfo["sub"],
+            role=idinfo["role"],
         ),
     )
     access_token = _create_access_token(user)
@@ -113,5 +116,5 @@ def _create_access_token(user: models.User, expires_delta: Union[timedelta, None
     return encoded_jwt
 
 
-def _is_allowed_email(email: str) -> bool:
+def _is_first_allowed_email(email: str) -> bool:
     return email == FIRST_ALLOWED_USER_EMAIL

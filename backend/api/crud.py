@@ -22,6 +22,7 @@ def create_user(db: Session, user: schemas.UserCreate) -> models.User:
         given_name=user.given_name,
         family_name=user.family_name,
         google_sub=user.google_sub,
+        role=user.role,
     )
     db.add(db_user)
     db.commit()

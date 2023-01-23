@@ -1,6 +1,5 @@
-from typing import Optional, List
-
 from pydantic import BaseModel
+from .models import RolesEnum
 
 
 class Token(BaseModel):
@@ -25,6 +24,7 @@ class UserBase(BaseModel):
     picture_url: str
     given_name: str
     family_name: str
+    role: RolesEnum
 
 
 class UserCreate(UserBase):
