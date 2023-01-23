@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 from .models import RolesEnum
 
@@ -24,11 +26,13 @@ class UserBase(BaseModel):
     picture_url: str
     given_name: str
     family_name: str
-    role: RolesEnum
 
 
 class UserCreate(UserBase):
     google_sub: str
+    role: RolesEnum | None
+    valid_from: datetime | None
+    valid_until: datetime | None
 
 
 class User(UserBase):

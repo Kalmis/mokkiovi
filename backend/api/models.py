@@ -1,6 +1,8 @@
 import enum
 
-from sqlalchemy import Boolean, Column, Integer, String, Enum
+from sqlalchemy import Boolean, Column, Integer, String, Enum, ForeignKey, DateTime
+from sqlalchemy.orm import relationship
+
 
 from .database import Base
 
@@ -21,5 +23,18 @@ class User(Base):
     picture_url = Column(String, nullable=True)
     given_name = Column(String, nullable=False)
     family_name = Column(String, nullable=False)
-    role = Column(Enum(RolesEnum), nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
+
+    roles = relationship("UserRole", back_populates="user", cascade="all, delete-orphan")
+
+
+class UserRole(Base):
+
+    __tablename__ = "user_roles"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
+    role = Column(Enum(RolesEnum), nullable=False)
+    valid_from = Column(DateTime, nullable=False)
+    valid_until = Column(DateTime, nullable=True)
+
+    user = relationship("User", back_populates="roles")

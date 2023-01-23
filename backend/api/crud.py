@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 
 
-def get_user(db: Session, user_id: int):
+def get_user(db: Session, user_id: int) -> models.User:
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
@@ -22,9 +22,14 @@ def create_user(db: Session, user: schemas.UserCreate) -> models.User:
         given_name=user.given_name,
         family_name=user.family_name,
         google_sub=user.google_sub,
-        role=user.role,
     )
     db.add(db_user)
+
+    if user.role:
+        db_user_roles = models.UserRole(
+            user=db_user, role=user.role, valid_from=user.valid_from, valid_until=user.valid_until
+        )
+        db.add(db_user_roles)
     db.commit()
     db.refresh(db_user)
     return db_user

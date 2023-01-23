@@ -85,8 +85,7 @@ def _handle_login(db: Session, idinfo: dict, validate_allowed_email: bool = True
         logging.info("user not allowed to login")
         raise HTTPException(status_code=401, detail="user not allowed to login")
 
-    # If we are here, we are creating first user
-    idinfo["role"] = RolesEnum.ADMIN
+    # Create the first user
 
     user = create_user(
         db,
@@ -96,7 +95,8 @@ def _handle_login(db: Session, idinfo: dict, validate_allowed_email: bool = True
             given_name=idinfo["given_name"],
             family_name=idinfo["family_name"],
             google_sub=idinfo["sub"],
-            role=idinfo["role"],
+            role=RolesEnum.ADMIN,
+            valid_from=datetime.utcnow(),
         ),
     )
     access_token = _create_access_token(user)
