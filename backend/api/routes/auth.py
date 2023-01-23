@@ -1,16 +1,12 @@
-import logging
 from datetime import datetime, timedelta
+import logging
 from typing import Union
 
 from fastapi import APIRouter, Depends, HTTPException
-
 from google.auth.exceptions import GoogleAuthError
 from google.auth.transport import requests
 from google.oauth2 import id_token
-
-
 from jose import jwt
-
 from sqlalchemy.orm import Session
 
 from .. import models
@@ -24,7 +20,7 @@ from ..config import (
 )
 from ..crud import create_user, get_user_by_google_sub
 from ..dependencies import get_current_user, get_db
-from ..schemas import GoogleToken, TestLogin, Token, User, UserCreate, RolesEnum
+from ..schemas import GoogleToken, RolesEnum, TestLogin, Token, User, UserCreate
 
 router = APIRouter()
 

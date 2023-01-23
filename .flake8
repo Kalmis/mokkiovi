@@ -43,7 +43,7 @@ import-order-style = spoqa
 type-checking-pydantic-enabled = true
 type-checking-exempt-modules = typing, typing_extensions
 jira-project-ids = KAIKU
-application-import-names = api
+application-import-names = api # Set also in pyproject.toml for isort
 
 per-file-ignores = 
     # Ignore imported but not used in init files, and * imports
