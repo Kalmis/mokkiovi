@@ -9,6 +9,7 @@
   "python.defaultInterpreterPath": "${workspaceFolder}/venv/bin/python",
   "python.linting.enabled": true,
   "debug.internalConsoleOptions": "neverOpen",
+  "isort.args": ["--settings-path", "${workspaceFolder}/pyproject.toml"],
   "[python]": {
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
