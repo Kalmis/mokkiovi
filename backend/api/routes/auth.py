@@ -19,17 +19,10 @@ from ..config import (
     TEST_USER,
 )
 from ..crud import create_user, get_user_by_google_sub
-from ..dependencies import get_current_user, get_db
-from ..schemas import GoogleToken, RolesEnum, TestLogin, Token, TokenData, User, UserCreate
+from ..dependencies import get_db
+from ..schemas import GoogleToken, RolesEnum, TestLogin, Token, TokenData, UserCreate
 
 router = APIRouter()
-
-
-@router.get("/users/me", response_model=User)
-async def read_users_me(
-    current_user: models.User = Depends(get_current_user),  # noqa: B008
-):
-    return current_user
 
 
 @router.post("/token/test", response_model=Token)

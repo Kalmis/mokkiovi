@@ -4,7 +4,6 @@
 import type { GoogleToken } from '../models/GoogleToken';
 import type { TestLogin } from '../models/TestLogin';
 import type { Token } from '../models/Token';
-import type { User } from '../models/User';
 import type { Users } from '../models/Users';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -13,18 +12,6 @@ import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class DefaultService {
 
     constructor(public readonly httpRequest: BaseHttpRequest) {}
-
-    /**
-     * Read Users Me
-     * @returns User Successful Response
-     * @throws ApiError
-     */
-    public readUsersMeUsersMeGet(): CancelablePromise<User> {
-        return this.httpRequest.request({
-            method: 'GET',
-            url: '/users/me',
-        });
-    }
 
     /**
      * Login For Access Token With Test User
