@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import type { CredentialResponse } from '@react-oauth/google';
-import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import { TestLogin, GoogleToken } from './openapi';
+import BackEndService from './BackendService';
 
 type User = {
   sub: string;
@@ -10,12 +11,6 @@ type User = {
   picture_url: string | undefined;
   role: string;
 }
-
-type CreateTokenResponse = {
-  access_token: string;
-  token_type: string;
-  given_name: string;
-};
 
 interface AuthContextType {
   user: User;
@@ -31,13 +26,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<any>(null);
 
   const signin = async (credentials: CredentialResponse) => {
-    const backendUrl =
-      process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
-    const payload = { id_token: credentials.credential };
-    const { data } = await axios.post<CreateTokenResponse>(
-      `${backendUrl}/token/google`,
-      payload
-    );
+    // FIXME
+    const id_token = credentials.credential || ''
+    const payload: GoogleToken = { id_token };
+    const data = await BackEndService.default.loginForAccessTokenWithGoogleTokenGooglePost(payload)
     localStorage.setItem('token', data.access_token);
     setUser(jwt_decode(data.access_token));
   };
@@ -49,13 +41,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    * @param username The username which is configured on backend for test use
    */
   const siginTest = async (username: string) => {
-    const backendUrl =
-      process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
-    const payload = { username };
-    const { data } = await axios.post<CreateTokenResponse>(
-      `${backendUrl}/token/test`,
-      payload
-    );
+    const payload: TestLogin = { username };
+    const data = await BackEndService.default.loginForAccessTokenWithTestUserTokenTestPost(payload)
     localStorage.setItem('token', data.access_token);
     setUser(jwt_decode(data.access_token));
   };
