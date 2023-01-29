@@ -149,7 +149,7 @@ function MainAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={`${auth.user.given_name} ${auth.user.family_name}`} src={auth.user.picture_url || "dummyurl"}/>
+                <Avatar alt={`${auth.user?.given_name} ${auth.user?.family_name}`} src={auth.user?.picture_url || "dummyurl"}/>
               </IconButton>
             </Tooltip>
             <Menu

@@ -8,7 +8,7 @@ export default function FeedPage() {
     return (
       <div>
         <h1>
-          You are on Feed page, {auth.user.given_name}
+          You are on Feed page, {auth.user?.given_name}
         </h1>
       </div>
     );

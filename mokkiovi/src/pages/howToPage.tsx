@@ -8,7 +8,7 @@ export default function HowToPage() {
     return (
       <div>
         <h1>
-          You are on How-to page, {auth.user.given_name}
+          You are on How-to page, {auth.user?.given_name}
         </h1>
       </div>
     );

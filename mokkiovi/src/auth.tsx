@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import type { CredentialResponse } from '@react-oauth/google';
 import jwt_decode from 'jwt-decode';
 import { TestLogin, GoogleToken } from './openapi';
-import BackEndService from './BackendService';
+import MokkioviService from './openapi/Mokkiovi';
 
 type User = {
   sub: string;
@@ -13,7 +13,8 @@ type User = {
 }
 
 interface AuthContextType {
-  user: User;
+  user: User | undefined;
+  token: string;
   signin: (credentials: CredentialResponse) => void;
   siginTest: (username: string) => void;
   signout: () => void;
@@ -23,14 +24,16 @@ interface AuthContextType {
 const AuthContext = React.createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = React.useState<any>(null);
+  const [user, setUser] = React.useState<User | undefined>(undefined);
+  const [token, setToken] = React.useState<string>('')
 
   const signin = async (credentials: CredentialResponse) => {
     // FIXME
-    const id_token = credentials.credential || ''
-    const payload: GoogleToken = { id_token };
-    const data = await BackEndService.default.loginForAccessTokenWithGoogleTokenGooglePost(payload)
+    const idToken = credentials.credential || ''
+    const payload: GoogleToken = { id_token: idToken };
+    const data = await MokkioviService.default.loginForAccessTokenWithGoogleTokenGooglePost(payload)
     localStorage.setItem('token', data.access_token);
+    setToken(data.access_token)
     setUser(jwt_decode(data.access_token));
   };
 
@@ -42,13 +45,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    */
   const siginTest = async (username: string) => {
     const payload: TestLogin = { username };
-    const data = await BackEndService.default.loginForAccessTokenWithTestUserTokenTestPost(payload)
+    const data = await MokkioviService.default.loginForAccessTokenWithTestUserTokenTestPost(payload)
     localStorage.setItem('token', data.access_token);
+    setToken(data.access_token)
     setUser(jwt_decode(data.access_token));
   };
 
   const signout = () => {
     localStorage.clear();
+    setToken('')
     setUser(undefined);
   };
 
@@ -64,12 +69,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const memoedValue = useMemo(
     () => ({
       user,
+      token,
       signin,
       siginTest,
       signout,
       loadTokenFromStorage,
     }),
-    [user]
+    [user, token]
   );
 
   return (
