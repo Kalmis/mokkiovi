@@ -89,6 +89,9 @@ export default function SettingsPage() {
       }
       const axiosRequest = getUsers()
       return (): void => {
+        // FIXME: Due to usage of React strictmode all components are rendered twice
+        // which means that useEffect is also ran twice. The request is so quick that
+        // it does not get canceled by this. Look into react-query instead
         axiosRequest.cancel  // eslint-disable-line
       }
     }, [])
