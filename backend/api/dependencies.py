@@ -29,7 +29,7 @@ def get_current_user_token(token: str = Depends(oauth2_scheme)) -> TokenData:  #
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        token_data = TokenData(user_id=payload["sub"])
+        token_data = TokenData(**payload)
         return token_data
     except (JWTError, KeyError) as e:
         print(e)

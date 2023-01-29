@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship
 from .database import Base
 
 
-class RolesEnum(str, enum.Enum):
+class RolesEnum(enum.Enum):
     # Note: The variable name is stored in DB; not value
     ADMIN = "Admin"
     NORMAL = "Normal"

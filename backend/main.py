@@ -4,10 +4,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from api.routes import auth
+from api.routes import auth, users
 
 app = FastAPI()
 app.include_router(auth.router)
+app.include_router(users.router)
 
 origins_raw = os.environ["BACKEND_ALLOWED_ORIGINS"]
 

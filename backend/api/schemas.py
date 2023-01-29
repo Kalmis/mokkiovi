@@ -11,7 +11,13 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    user_id: int
+    sub: str
+    given_name: str
+    family_name: str
+    role: RolesEnum
+
+    class Config:
+        use_enum_values = True
 
 
 class TestLogin(BaseModel):
@@ -20,6 +26,24 @@ class TestLogin(BaseModel):
 
 class GoogleToken(BaseModel):
     id_token: str
+
+
+class UserRoleBase(BaseModel):
+    role: RolesEnum
+    valid_from: datetime
+    valid_until: datetime | None
+
+
+class UserRole(UserRoleBase):
+    user_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class UserRoleWithoutId(UserRoleBase):
+    class Config:
+        orm_mode = True
 
 
 class UserBase(BaseModel):
@@ -38,6 +62,11 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     id: int
+    roles: list[UserRoleWithoutId]
 
     class Config:
         orm_mode = True
+
+
+class Users(BaseModel):
+    __root__: list[User]

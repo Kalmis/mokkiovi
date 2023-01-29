@@ -20,7 +20,7 @@ from ..config import (
 )
 from ..crud import create_user, get_user_by_google_sub
 from ..dependencies import get_current_user, get_db
-from ..schemas import GoogleToken, RolesEnum, TestLogin, Token, User, UserCreate
+from ..schemas import GoogleToken, RolesEnum, TestLogin, Token, TokenData, User, UserCreate
 
 router = APIRouter()
 
@@ -104,13 +104,14 @@ def _handle_login(db: Session, idinfo: dict, validate_allowed_email: bool = True
 
 
 def _create_access_token(user: models.User, expires_delta: Union[timedelta, None] = None):
-    data = {
-        "sub": str(user.id),
-        "given_name": user.given_name,
-        "family_name": user.family_name,
-        "role": user.current_role(),
-    }
-    to_encode = data.copy()
+    token_data = TokenData(
+        sub=str(user.id),
+        given_name=user.given_name,
+        family_name=user.family_name,
+        role=user.current_role(),
+    )
+    print(user.current_role())
+    to_encode = token_data.dict()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
