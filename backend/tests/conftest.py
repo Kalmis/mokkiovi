@@ -16,28 +16,35 @@ def app_client() -> TestClient:
 
 
 @pytest.fixture
-def authenticated_app_client(app_client: TestClient) -> TestClient:
+def app_client_admin(app_client: TestClient) -> TestClient:
+    encoded_jwt = _create_jwt(RolesEnum.ADMIN)
+    app_client.headers = {"Authorization": f"Bearer {encoded_jwt}"}
+    return app_client
+
+
+@pytest.fixture
+def app_client_normal(app_client: TestClient) -> TestClient:
+    encoded_jwt = _create_jwt(RolesEnum.NORMAL)
+    app_client.headers = {"Authorization": f"Bearer {encoded_jwt}"}
+    return app_client
+
+
+@pytest.fixture
+def app_client_guest(app_client: TestClient) -> TestClient:
+    encoded_jwt = _create_jwt(RolesEnum.GUEST)
+    app_client.headers = {"Authorization": f"Bearer {encoded_jwt}"}
+    return app_client
+
+
+def _create_jwt(role: RolesEnum):
     token_data = TokenData(
         sub=str(1),
         given_name="Test",
         family_name="User",
-        role=RolesEnum.ADMIN,
+        role=role,
     )
     to_encode = token_data.dict()
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    app_client.headers = {"Authorization": f"Bearer {encoded_jwt}"}
-    return app_client
-
-
-class TestUsersApi:
-    def test_get_all_users(self, authenticated_app_client: TestClient):
-        client = authenticated_app_client
-        response = client.get("/users")
-        assert response.status_code == 200
-
-    def test_get_all_users_error(self, app_client: TestClient):
-        client = app_client
-        response = client.get("/users")
-        assert response.status_code == 401
+    return encoded_jwt
